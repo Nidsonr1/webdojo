@@ -40,3 +40,23 @@ Cypress.Commands.add('verifyMessageErrorInLogin', () => {
   cy.contains('Acesso negado! Tente novamente')
       .should('be.visible');
 })
+
+Cypress.Commands.add('goTo', (buttonName, pageTitle) => {
+  cy.contains('button', buttonName)
+    .should('be.visible')
+    .click()
+
+  cy.contains('h1', pageTitle)
+    .should('be.visible')
+    .should('have.text', pageTitle)
+});
+
+Cypress.Commands.add('submitConsultancyForm', () => {
+  cy.contains('button', 'Enviar formulário')
+      .click();
+});
+
+Cypress.Commands.add('alertMessagesShouldBeVisible', (message) => {
+  cy.contains('p', message)
+    .should('be.visible');
+});
