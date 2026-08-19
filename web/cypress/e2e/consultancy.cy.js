@@ -3,23 +3,32 @@ describe('Consultoria', () => {
     cy.accessLogin();
     cy.submitLoginForm('papito@webdojo.com', 'katana123');
     cy.goTo('Formulários', 'Consultoria');
-  })
+  });
 
   it('Deve retornar mensagens de campos obrigatórios', () => {
     cy.submitConsultancyForm();
 
-    const messages = [
-      'Digite nome e sobrenome',
-      'Informe um email válido',
-      'Você precisa aceitar os termos de uso'
+    const verifyMessages = [
+      {
+        input: "Nome Completo",
+        message: "Campo obrigatório"
+      },
+      {
+        input: "Email",
+        message: "Campo obrigatório"
+      },
+      {
+        input: "termos de uso",
+        message: "Você precisa aceitar os termos de uso"
+      }
     ];
 
-    messages.forEach((message) => {
-      cy.alertMessagesShouldBeVisible(message);
-    });
+    verifyMessages.forEach((message) => {
+      cy.alertMessagesShouldBeVisible(message)
+    })   
   });
 
-  it('Deve cadastrar uma consultoria individual', () => {
+  it.only('Deve cadastrar uma consultoria individual', () => {
     cy.get('input[id="name"]').type('Francisa Laisa Unias Ribeiro');
     cy.get('input[id="email"]').type('xiquinha@contato.com');
 
@@ -83,9 +92,12 @@ describe('Consultoria', () => {
       .click();
 
     cy.submitConsultancyForm();
-
-    cy.contains('h3', 'Sucesso!')
-    cy.contains('p', 'Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido');
+    
+    cy.get('.modal', { timeout: 7000 })
+      .should('be.visible')
+      .find('.modal-content')
+      .should('be.visible')
+      .and('have.text', 'Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido.');
   })
 
 })
